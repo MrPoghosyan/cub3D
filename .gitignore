@@ -10,6 +10,5 @@ cub3D
 # VSCode
 .vscode/
 
-# MiniLibX build files
-#mlx/*.o
-#mlx/*.a
+# MiniLibX
+mlx/
