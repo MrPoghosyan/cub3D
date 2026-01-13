@@ -1,0 +1,15 @@
+# Object files
+*.o
+
+# Executable
+cub3D
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# MiniLibX build files
+#mlx/*.o
+#mlx/*.a
