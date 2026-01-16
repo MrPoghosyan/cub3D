@@ -12,3 +12,6 @@ cub3D
 
 # MiniLibX
 mlx/
+
+# Docker
+Dockerfile
