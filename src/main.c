@@ -1,6 +1,6 @@
-#include "header.h"
+#include "cub3D.h"
 
-int main(void)
+int	main(void)
 {
 	printf("Good!\n");
 	return (0);
