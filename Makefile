@@ -26,7 +26,12 @@ endif
 MLX_A		= $(MLX_DIR)/libmlx.a
 
 # Source files
-SRC			= $(SRC_DIR)/main.c
+SRC			= \
+			$(SRC_DIR)/main.c \
+			$(SRC_DIR)/parser.c \
+			$(SRC_DIR)/parser_helpers.c \
+			$(SRC_DIR)/validation.c \
+			$(SRC_DIR)/validation_helpers.c
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Include paths
