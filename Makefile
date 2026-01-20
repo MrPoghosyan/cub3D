@@ -44,7 +44,7 @@ all: $(NAME)
 
 # Main executable
 $(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(MLX_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -LLibft -lft $(MLX_FLAGS) -o $(NAME)
 
 # Object files directory
 $(OBJ_DIR):
