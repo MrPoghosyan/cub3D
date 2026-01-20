@@ -13,6 +13,7 @@ INC_DIR     = include
 
 LIBFT_DIR   = Libft
 LIBFT_A     = $(LIBFT_DIR)/libft.a
+INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # ----------------------------- OS-dependent MiniLibX ----------------------- #
 ifeq ($(UNAME), Linux)
@@ -28,10 +29,14 @@ ifeq ($(UNAME), Darwin)
 endif
 
 # ----------------------------- SOURCES & OBJECTS ---------------------------- #
-SRC         = $(shell find $(SRC_DIR) -name "*.c")
-OBJ         = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
+# Source files
+SRC			= \
+			$(SRC_DIR)/main.c \
+			$(SRC_DIR)/parser.c \
+			$(SRC_DIR)/parser_helpers.c \
+			$(SRC_DIR)/validation.c \
+			$(SRC_DIR)/validation_helpers.c
+OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # ----------------------------- RULES ---------------------------------------- #
 
@@ -47,7 +52,7 @@ mlx_mlx:
 
 # Build executable
 $(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(MLX_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -LLibft -lft $(MLX_FLAGS) -o $(NAME)
 
 # Ensure object directory exists
 $(OBJ_DIR):
