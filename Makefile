@@ -13,6 +13,7 @@ INC_DIR     = include
 
 LIBFT_DIR   = Libft
 LIBFT_A     = $(LIBFT_DIR)/libft.a
+INC_DIR		= include
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # ----------------------------- OS-dependent MiniLibX ----------------------- #
@@ -32,10 +33,14 @@ endif
 # Source files
 SRC			= \
 			$(SRC_DIR)/main.c \
+			$(SRC_DIR)/error.c \
 			$(SRC_DIR)/parser.c \
 			$(SRC_DIR)/parser_helpers.c \
 			$(SRC_DIR)/validation.c \
-			$(SRC_DIR)/validation_helpers.c
+			$(SRC_DIR)/validation_helpers.c \
+			$(SRC_DIR)/engine/engine.c \
+			$(SRC_DIR)/engine/hooks.c \
+			$(SRC_DIR)/engine/render.c 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # ----------------------------- RULES ---------------------------------------- #
@@ -55,8 +60,9 @@ $(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)
 	$(CC) $(CFLAGS) $(OBJ) -LLibft -lft $(MLX_FLAGS) -o $(NAME)
 
 # Ensure object directory exists
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Compile object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)

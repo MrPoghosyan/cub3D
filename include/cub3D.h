@@ -88,7 +88,6 @@ int				parse_game(const char *path, t_game *game);
 
 void			err(char *msg);
 t_cub			*init_game(char *path);
-void			init_mlx(t_cub *cub);
 void			free_cub(t_cub *cub);
 
 #endif
