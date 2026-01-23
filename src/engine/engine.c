@@ -8,7 +8,7 @@ void	engine_init(t_cub *cub)
 	cub->win = mlx_new_window(cub->mlx, 800, 600, "cub3D");
 	if (!cub->win)
 		err("mlx_new_window failed");
-	mlx_hook(cub->win, 2, 1L << 0, key_press, cub); // ESC key
+	mlx_hook(cub->win, 2, 1L << 0, key_hook, cub); // ESC key
 	mlx_hook(cub->win, 17, 0, close_game, cub);     // close window button
 	mlx_loop_hook(cub->mlx, engine_loop, cub);
 }

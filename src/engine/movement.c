@@ -1,4 +1,4 @@
-#include "cub3D.h"
+#include "engine.h"
 
 // ստուգում է, արդյոք տրված դիրքում կարելի է շարժվել
 static int can_move(t_map *map, int x, int y)

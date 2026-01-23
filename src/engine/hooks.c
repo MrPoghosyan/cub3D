@@ -16,11 +16,20 @@ int	close_game(t_cub *cub)
 	return (0);
 }
 
-int	key_press(int keycode, t_cub *cub)
+int	key_hook(int keycode, t_cub *cub)
 {
-	(void)cub;
-
 	if (keycode == 65307) // ESC
 		return close_game(cub);
+	if (keycode == 'w')
+		move_forward(cub);
+	if (keycode == 's')
+		move_backward(cub);
+	if (keycode == 'a')
+		turn_left(cub);
+	if (keycode == 'd')
+		turn_right(cub);
+#if DEBUG_2D // dellet
+	draw_map_2d(cub);
+#endif
 	return (0);
 }

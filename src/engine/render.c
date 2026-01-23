@@ -1,49 +1,37 @@
 #include "engine.h"
 
-static void	draw_rect(t_cub *cub, int x, int y, int color)
+void draw_map_2d(t_cub *cub)
 {
-	int	i;
-	int	j;
+    int x, y;
+    int size = 20; // մի բջիջի pixel չափը
+    for (y = 0; y < cub->game.map.height; y++)
+    {
+        for (x = 0; x < cub->game.map.width; x++)
+        {
+            char c = cub->game.map.grid[y][x];
+            int color;
 
-	i = 0;
-	while (i < TILE_SIZE)
-	{
-		j = 0;
-		while (j < TILE_SIZE)
-		{
-			mlx_pixel_put(cub->mlx, cub->win, x + j, y + i, color);
-			++j;
-		}
-		++i;
-	}
-}
+            if (c == '1')
+                color = 0xFFFFFF; // White wall
+            else
+                color = 0x000000; // Black floor
 
-void	draw_map_2d(t_cub *cub)
-{
-	int y, x;
-	int px, py;
-	t_map *map = &cub->game.map;
+            int px = x * size;
+            int py = y * size;
 
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			px = x * TILE_SIZE;
-			py = y * TILE_SIZE;
-			char c = map->grid[y][x];
+            // simple pixel fill (rectangle)
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    mlx_pixel_put(cub->mlx, cub->win, px + i, py + j, color);
+        }
+    }
 
-			if (c == '1')          // Wall
-				draw_rect(cub, px, py, 0x808080); // grey
-			else if (c == '0')     // Empty floor
-				draw_rect(cub, px, py, 0x000000); // black
-			else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-				draw_rect(cub, px, py, 0x000000); // piayer will be drawn later
-			++x;
-		}
-		++y;
-	}
+    // Draw player
+    int px = cub->game.map.player_x * size;
+    int py = cub->game.map.player_y * size;
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            mlx_pixel_put(cub->mlx, cub->win, px + i, py + j, 0xFF0000); // Red player
 }
 
 void	draw_player(t_cub *cub)

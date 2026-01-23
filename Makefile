@@ -40,7 +40,8 @@ SRC			= \
 			$(SRC_DIR)/validation_helpers.c \
 			$(SRC_DIR)/engine/engine.c \
 			$(SRC_DIR)/engine/hooks.c \
-			$(SRC_DIR)/engine/render.c 
+			$(SRC_DIR)/engine/render.c \
+			$(SRC_DIR)/engine/movement.c 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # ----------------------------- RULES ---------------------------------------- #
