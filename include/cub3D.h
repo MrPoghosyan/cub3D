@@ -51,10 +51,9 @@ typedef struct s_cub
 
 typedef struct s_parser
 {
-	FILE		*f;
+	int			fd;
 	char		*line;
-	size_t		len;
-	ssize_t		rd;
+	int			rd;
 	char		**map_lines;
 	int			map_count;
 	int			in_map;
@@ -87,6 +86,7 @@ int				read_lines(t_parser *p, t_game *game);
 int				parse_game(const char *path, t_game *game);
 
 void			err(char *msg);
+void			print_err(char *msg);
 t_cub			*init_game(char *path);
 void			free_cub(t_cub *cub);
 
