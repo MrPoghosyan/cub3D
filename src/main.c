@@ -1,19 +1,37 @@
 #include "cub3D.h"
+#include "engine.h"
 
-int	main(int argc, char **argv)
+t_cub	*init_game(char *path)
 {
-	t_game	game;
+	t_cub	*cub;
 
-	if (argc != 2)
+	cub = malloc(sizeof(t_cub));
+	if (!cub)
+		err("malloc failed");
+	ft_memset(cub, 0, sizeof(t_cub));
+	if (!parse_game(path, &cub->game))
 	{
-		printf("Usage: %s <map.cub>\n", argv[0]);
-		return (1);
+		free(cub);
+		err("parse failed");
 	}
-	if (!parse_game(argv[1], &game))
-	{
-		printf("Validation failed\n");
-		return (1);
-	}
-	printf("Validation OK\n");
-	return (0);
+	return (cub);
+}
+
+void	free_cub(t_cub *cub)
+{
+	if (cub->win)
+		mlx_destroy_window(cub->mlx, cub->win);
+	free(cub);
+}
+
+int	main(int ac, char **av)
+{
+	t_cub	*cub;
+
+	if (ac != 2)
+		err("Invalid count of arguments\n");
+	cub = init_game(av[1]);
+	engine_init(cub);
+	mlx_loop(cub->mlx);
+	free_cub(cub);
 }

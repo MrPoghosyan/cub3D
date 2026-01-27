@@ -1,76 +1,24 @@
 #include "cub3D.h"
 
-static char	*str_trim_left(char *s)
+// Նախաբաննա սկզբանավորումա պարսերը և խաղի կառուցվածքները, բացումա ֆայլը
+int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 {
-	while (*s && (*s == ' ' || *s == '\t'))
-		s++;
-	return (s);
-}
-
-static char	*dup_trimmed(char *s)
-{
-	char	*t;
-
-	t = ft_strtrim(s, " \t\n");
-	return (t);
-}
-
-static int	starts_with(const char *s, const char *p)
-{
-	while (*p)
-	{
-		if (*s == '\0' || *s != *p)
-			return (0);
-		s++;
-		p++;
-	}
-	return (1);
-}
-
-static void	free_str_list(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-}
-
-int	parse_game(const char *path, t_game *game)
-{
-	FILE	*f;
-	char	*line;
-	size_t	len;
-	ssize_t	read;
-	char	**map_lines;
-	int		map_count;
-	int		in_map;
-	char	*s;
-	char	*t;
-	char	*v;
-	char	*v;
-	char	*v;
-	char	*v;
-	char	*v;
-	char	*v;
-	char	*copy;
-	char	**new;
-	int		maxw;
-	int		l;
-
-	line = NULL;
-	len = 0;
-	map_lines = NULL;
-	map_count = 0;
+	p->line = NULL;
+	p->len = 0;
+	p->map_lines = NULL;
+	p->map_count = 0;
+	p->in_map = 0;
 	if (!path || !game)
+	{
+		fprintf(stderr, "Error\nparse_game: invalid arguments\n");
 		return (0);
-	f = fopen(path, "r");
-	if (!f)
+	}
+	p->f = fopen(path, "r");
+	if (!p->f)
+	{
+		fprintf(stderr, "Error\nparse_game: failed to open file %s\n", path);
 		return (0);
-	/* init */
+	}
 	game->textures.no = NULL;
 	game->textures.so = NULL;
 	game->textures.we = NULL;
@@ -78,152 +26,77 @@ int	parse_game(const char *path, t_game *game)
 	game->map.grid = NULL;
 	game->map.width = 0;
 	game->map.height = 0;
-	in_map = 0;
-	while ((read = getline(&line, &len, f)) != -1)
+	return (1);
+}
+
+// Կարդում է բոլոր ֆայլի տողերը և մշակում դրանք
+int	read_file_lines(t_parser *p, t_game *game)
+{
+	p->rd = getline(&p->line, &p->len, p->f);
+	if (!read_lines(p, game))
 	{
-		s = line;
-		if (read > 0 && s[read - 1] == '\n')
-			s[read - 1] = '\0';
-		t = str_trim_left(s);
-		if (!in_map && (*t == '1' || *t == '0' || *t == ' '))
-			in_map = 1;
-		if (!in_map)
-		{
-			if (starts_with(t, "NO "))
-			{
-				v = dup_trimmed(t + 3);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				game->textures.no = v;
-			}
-			else if (starts_with(t, "SO "))
-			{
-				v = dup_trimmed(t + 3);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				game->textures.so = v;
-			}
-			else if (starts_with(t, "WE "))
-			{
-				v = dup_trimmed(t + 3);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				game->textures.we = v;
-			}
-			else if (starts_with(t, "EA "))
-			{
-				v = dup_trimmed(t + 3);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				game->textures.ea = v;
-			}
-			else if (starts_with(t, "F "))
-			{
-				v = dup_trimmed(t + 2);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				if (!validate_color(v, &game->floor_color))
-				{
-					free(v);
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				free(v);
-			}
-			else if (starts_with(t, "C "))
-			{
-				v = dup_trimmed(t + 2);
-				if (!v)
-				{
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				if (!validate_color(v, &game->ceiling_color))
-				{
-					free(v);
-					fclose(f);
-					free(line);
-					return (0);
-				}
-				free(v);
-			}
-			else if (*t == '\0')
-			{
-			}
-			else
-			{
-			}
-		}
-		else
-		{
-			copy = ft_strdup(s);
-			if (!copy)
-			{
-				fclose(f);
-				free(line);
-				free_str_list(map_lines);
-				return (0);
-			}
-			new = malloc(sizeof(char *) * (map_count + 2));
-			if (!new)
-			{
-				free(copy);
-				fclose(f);
-				free(line);
-				free_str_list(map_lines);
-				return (0);
-			}
-			for (int i = 0; i < map_count; ++i)
-				new[i] = map_lines[i];
-			new[map_count] = copy;
-			new[map_count + 1] = NULL;
-			free(map_lines);
-			map_lines = new;
-			map_count++;
-		}
-	}
-	free(line);
-	fclose(f);
-	if (map_count == 0)
-	{
-		free_str_list(map_lines);
+		fclose(p->f);
+		free(p->line);
+		free_str_array(p->map_lines);
+		fprintf(stderr, "Error\nparse_game: read_lines failed\n");
 		return (0);
 	}
-	game->map.grid = map_lines;
-	game->map.height = map_count;
-	maxw = 0;
-	for (int i = 0; i < map_count; ++i)
+	free(p->line);
+	fclose(p->f);
+	return (1);
+}
+
+// Ստեղծում է քարտեզի մատրիցը հավաքված տողերից
+int	setup_map(t_parser *p, t_game *game)
+{
+	if (p->map_count == 0)
 	{
-		l = ft_strlen(map_lines[i]);
-		if (l > maxw)
-			maxw = l;
+		free_str_array(p->map_lines);
+		fprintf(stderr, "Error\nparse_game: no map data found\n");
+		return (0);
 	}
-	game->map.width = maxw;
+	game->map.grid = p->map_lines;
+	game->map.height = p->map_count;
+	compute_map_width(p, game);
+	return (1);
+}
+
+// Վավերացնում է բոլոր պարսված խաղի տվյալները (տեքստուրաներ և քարտեզ)
+int	validate_game_data(t_game *game)
+{
 	if (!validate_textures(&game->textures))
+	{
+		fprintf(stderr, "Error\nparse_game: texture validation failed\n");
 		return (0);
+	}
 	if (!validate_map(&game->map))
+	{
+		fprintf(stderr, "Error\nparse_game: map validation failed\n");
+		return (0);
+	}
+	return (1);
+}
+
+// Կարդում է ֆայլը և վավերացնում բոլոր տվյալները
+int	read_and_validate(t_parser *p, t_game *game)
+{
+	if (!read_file_lines(p, game))
+		return (0);
+	if (!setup_map(p, game))
+		return (0);
+	if (!validate_game_data(game))
+		return (0);
+	return (1);
+}
+
+// Հիմնական ֆունկցիա՝ .cub ֆայլը վերածում է `t_game` կառուցվածքի
+int	parse_game(const char *path, t_game *game)
+{
+	t_parser	p;
+
+	if (!init_parser_and_game(path, &p, game))
+		return (0);
+	if (!read_and_validate(&p, game))
 		return (0);
 	return (1);
 }

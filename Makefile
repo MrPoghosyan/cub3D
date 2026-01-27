@@ -1,83 +1,87 @@
-NAME		= cub3D
+# ----------------------------- PROJECT SETTINGS ----------------------------- #
+NAME        = cub3D
 
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror
 
-RM			= rm -f
-UNAME		:= $(shell uname)
+RM          = rm -f
+UNAME       := $(shell uname)
 
-SRC_DIR		= src
-OBJ_DIR		= obj
+SRC_DIR     = src
+OBJ_DIR     = obj
+INC_DIR     = include
+
+LIBFT_DIR   = Libft
+LIBFT_A     = $(LIBFT_DIR)/libft.a
 INC_DIR		= include
-LIBFT		= Libft
-LIBFT_A		= $(LIBFT)/libft.a
+INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
-# OS-dependent MiniLibX setup
+# ----------------------------- OS-dependent MiniLibX ----------------------- #
 ifeq ($(UNAME), Linux)
-	MLX_DIR		= mlx/minilibx-linux
-	MLX_FLAGS	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+    MLX_DIR     = mlx/minilibx-linux
+    MLX_A       = $(MLX_DIR)/libmlx.a
+    MLX_FLAGS   = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 endif
 
 ifeq ($(UNAME), Darwin)
-	MLX_DIR		= mlx/minilibx-macos
-	MLX_FLAGS	= -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+    MLX_DIR     = mlx/minilibx-macos
+    MLX_A       = $(MLX_DIR)/libmlx.a
+    MLX_FLAGS   = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 endif
 
-MLX_A		= $(MLX_DIR)/libmlx.a
-
+# ----------------------------- SOURCES & OBJECTS ---------------------------- #
 # Source files
-SRC		= $(SRC_DIR)/main.c \
-			  $(SRC_DIR)/parser.c \
-			  $(SRC_DIR)/parser_textures.c \
-			  $(SRC_DIR)/parser_colors.c \
-			  $(SRC_DIR)/parser_map.c \
-			  $(SRC_DIR)/utils.c \
-			  $(SRC_DIR)/utils_extra.c
+SRC			= \
+			$(SRC_DIR)/main.c \
+			$(SRC_DIR)/error.c \
+			$(SRC_DIR)/parser.c \
+			$(SRC_DIR)/parser_helpers.c \
+			$(SRC_DIR)/validation.c \
+			$(SRC_DIR)/validation_helpers.c \
+			$(SRC_DIR)/engine/engine.c \
+			$(SRC_DIR)/engine/hooks.c \
+			$(SRC_DIR)/engine/render.c 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# Include paths
-INCLUDES	= -I$(INC_DIR) -I$(LIBFT) -I$(MLX_DIR)
+# ----------------------------- RULES ---------------------------------------- #
 
-# ------------------------------- RULES -------------------------------------- #
+all: mlx_libft mlx_mlx $(NAME)
 
-# Default rule
-all: $(NAME)
+# Build Libft
+mlx_libft:
+	$(MAKE) -C $(LIBFT_DIR)
 
-# Main executable
-$(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(MLX_FLAGS) -o $(NAME)
-
-# Object files directory
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-# Compile Libft
-$(LIBFT_A):
-	$(MAKE) -C $(LIBFT)
-
-# Compile MiniLibX
-$(MLX_A):
+# Build MiniLibX
+mlx_mlx:
 	$(MAKE) -C $(MLX_DIR)
 
-# Object compilation
+# Build executable
+$(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)
+	$(CC) $(CFLAGS) $(OBJ) -LLibft -lft $(MLX_FLAGS) -o $(NAME)
+
+# Ensure object directory exists
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compile object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Clean object files and Libft objects
 clean:
-	$(MAKE) clean -C $(LIBFT)
+	$(MAKE) clean -C $(LIBFT_DIR)
+	$(MAKE) clean -C $(MLX_DIR)
 	$(RM) -r $(OBJ_DIR)
 
 # Full clean including executable and Libft
 fclean: clean
-	$(MAKE) fclean -C $(LIBFT)
+	$(MAKE) fclean -C $(LIBFT_DIR)
 	$(RM) $(NAME)
 
 # Rebuild everything
 re: fclean all
 
-# Bonus rule (even if bonus not implemented yet)
+# Bonus rule placeholder
 bonus: all
-
-# Phony targets
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re bonus mlx_libft mlx_mlx
