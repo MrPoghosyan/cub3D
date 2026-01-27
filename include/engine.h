@@ -8,6 +8,16 @@
 # define MOVE_SPEED 1
 # define DEBUG_2D 1 //debug version
 
+typedef struct s_player
+{
+	double	x;
+	double	y;
+	double	dir_x;
+	double	dir_x;
+	double	plane_x;
+	double	plane_y;
+}	t_player;
+
 /* ========= ENGINE ========= */
 void	engine_init(t_cub *cub);
 int		engine_loop(t_cub *cub);

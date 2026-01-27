@@ -1,8 +1,9 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../Libft/libft.h"
+# include "libft.h"
 # include "mlx.h"
+# include "engine.h"
 # include <fcntl.h>  // Ֆայլեր բացելու համար
 # include <stdio.h>  // Տպելու և սխալների ֆունկցիաներ (printf, perror)
 # include <stdlib.h> // Հիշողության և ելքի ֆունկցիաներ (malloc, free, exit)
@@ -44,9 +45,10 @@ typedef struct s_game
 
 typedef struct s_cub
 {
-	t_game		game;
 	void		*mlx;
 	void		*win;
+	t_game		game;
+	t_player	player;
 }				t_cub;
 
 typedef struct s_parser

@@ -13,6 +13,16 @@ void	engine_init(t_cub *cub)
 	mlx_loop_hook(cub->mlx, engine_loop, cub);
 }
 
+void	init_player(t_cub *cub)
+{
+	cub->player.x = cub->game.map.player_x + 0.5;
+	cub->player.y = cub->game.map.player_y + 0.5;
+	cub->player.dir_x = -1.0;
+	cub->player.dir_y = 0.0;
+	cub->piayer.plane_x = 0.0;
+	cub->piayer.plane_y = 0.66;
+}
+
 int		engine_loop(t_cub *cub)
 {
 	render_frame(cub);
