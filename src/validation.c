@@ -24,39 +24,39 @@ int	validate_textures(t_texture *textures)
 
 	if (!textures)
 	{
-		fprintf(stderr, "Error\nMissing textures structure\n");
+		print_err("Missing textures structure");
 		return (0);
 	}
 	if (!textures->no || !textures->so || !textures->we || !textures->ea)
 	{
-		fprintf(stderr, "Error\nOne or more texture paths are missing\n");
+		print_err("One or more texture paths are missing");
 		return (0);
 	}
 	fd = open(textures->no, O_RDONLY);
 	if (fd < 0)
 	{
-		fprintf(stderr, "Error\nCannot open texture NO: %s\n", textures->no);
+		printf("Error\nCannot open texture NO: %s\n", textures->no);
 		return (0);
 	}
 	close(fd);
 	fd = open(textures->so, O_RDONLY);
 	if (fd < 0)
 	{
-		fprintf(stderr, "Error\nCannot open texture SO: %s\n", textures->so);
+		printf("Error\nCannot open texture SO: %s\n", textures->so);
 		return (0);
 	}
 	close(fd);
 	fd = open(textures->we, O_RDONLY);
 	if (fd < 0)
 	{
-		fprintf(stderr, "Error\nCannot open texture WE: %s\n", textures->we);
+		printf("Error\nCannot open texture WE: %s\n", textures->we);
 		return (0);
 	}
 	close(fd);
 	fd = open(textures->ea, O_RDONLY);
 	if (fd < 0)
 	{
-		fprintf(stderr, "Error\nCannot open texture EA: %s\n", textures->ea);
+		printf("Error\nCannot open texture EA: %s\n", textures->ea);
 		return (0);
 	}
 	close(fd);
@@ -89,7 +89,7 @@ int	validate_map(t_map *map)
 	}
 	if (player_count != 1)
 	{
-		fprintf(stderr, "Error\nPlayer count invalid: %d (expected 1)\n",
+		printf("Error\nPlayer count invalid: %d (expected 1)\n",
 			player_count);
 		return (0);
 	}
