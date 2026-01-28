@@ -42,20 +42,19 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 
 	if (!color_str || !r || !g || !b)
 	{
-		fprintf(stderr, "Error\nInvalid color string or NULL target\n");
+		print_err("Invalid color string or NULL target");
 		return (0);
 	}
 	values = ft_split(color_str, ',');
 	if (!values)
 	{
-		fprintf(stderr, "Error\nFailed to split color string\n");
+		print_err("Failed to split color string");
 		return (0);
 	}
 	if (!values[0] || !values[1] || !values[2] || values[3])
 	{
 		free_str_array(values);
-		fprintf(stderr,
-			"Error\nColor must have exactly 3 comma-separated values\n");
+		print_err("Color must have exactly 3 comma-separated values");
 		return (0);
 	}
 	t0 = ft_strtrim(values[0], " \t\n");
@@ -67,7 +66,7 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 		free(t0);
 		free(t1);
 		free(t2);
-		fprintf(stderr, "Error\nFailed to trim color components\n");
+		print_err("Failed to trim color components");
 		return (0);
 	}
 	*r = ft_atoi(t0);
@@ -78,7 +77,7 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 	free(t2);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
 	{
-		fprintf(stderr, "Error\n (got %d,%d,%d)\n", *r, *g, *b);
+		printf("Error\n (got %d,%d,%d)\n", *r, *g, *b);
 		return (0);
 	}
 	return (1);
@@ -126,7 +125,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 		c = ' ';
 	if (!is_map_char(c))
 	{
-		fprintf(stderr, "Error\nInvalid map character '%c' at (%d,%d)\n", c, y,
+		printf("Error\nInvalid map character '%c' at (%d,%d)\n", c, y,
 			x);
 		return (0);
 	}
@@ -141,7 +140,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 	{
 		if (!cell_enclosed(map, y, x))
 		{
-			fprintf(stderr, "Error\nMap cell at (%d,%d) is not enclosed\n", y,
+			printf("Error\nMap cell at (%d,%d) is not enclosed\n", y,
 				x);
 			return (0);
 		}
