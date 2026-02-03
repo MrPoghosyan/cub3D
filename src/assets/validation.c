@@ -1,6 +1,5 @@
 #include "cub3D.h"
 
-// Պարսինգա անում և RGB գույնի տողը, պահում է `t_color structure ում
 int	validate_color(char *color_str, t_color *color)
 {
 	int	r;
@@ -17,7 +16,6 @@ int	validate_color(char *color_str, t_color *color)
 	return (1);
 }
 
-// Ստուգումա որ բոլոր texture ֆայլերը գոյություն ունեն և կարդացվում են
 int	validate_textures(t_texture *textures)
 {
 	int	fd;
@@ -63,7 +61,6 @@ int	validate_textures(t_texture *textures)
 	return (1);
 }
 
-// Վավերացնումա ամբողջ քարտեզը ստուգումա յուրաքանչյուր բջիջը, ունի միայն մեկ խաղացող և ճիշտ շրջափակում առաջին if ը
 int	validate_map(t_map *map)
 {
 	int	y;

@@ -1,69 +1,106 @@
-#include "engine.h"
+#include "cub3D.h"
 
-void draw_map_2d(t_cub *cub)
+void    ray_step_calc(t_cub *cub, t_ray *ray)
 {
-    int x, y;
-    int size = 20; // մի բջիջի pixel չափը
-    for (y = 0; y < cub->game.map.height; y++)
+    if (ray->ray_dir_x < 0)
     {
-        for (x = 0; x < cub->game.map.width; x++)
-        {
-            char c = cub->game.map.grid[y][x];
-            int color;
-
-            if (c == '1')
-                color = 0xFFFFFF; // White wall
-            else
-                color = 0x000000; // Black floor
-
-            int px = x * size;
-            int py = y * size;
-
-            // simple pixel fill (rectangle)
-            for (int i = 0; i < size; i++)
-                for (int j = 0; j < size; j++)
-                    mlx_pixel_put(cub->mlx, cub->win, px + i, py + j, color);
-        }
+        ray->step_x = -1;
+        ray->side_x = (cub->player.x - ray->map_x) * ray->delta_x;
     }
-
-    // Draw player
-    int px = cub->game.map.player_x * size;
-    int py = cub->game.map.player_y * size;
-    for (int i = 0; i < size; i++)
-        for (int j = 0; j < size; j++)
-            mlx_pixel_put(cub->mlx, cub->win, px + i, py + j, 0xFF0000); // Red player
+    else
+    {
+        ray->step_x = 1;
+        ray->side_x = (ray->map_x + 1.0 - cub->player.x) *
+            ray->delta_x;
+    }
+    if (ray->ray_dir_y < 0)
+    {
+        ray->step_y = -1;
+        ray->side_y = (cub->player.y - ray->map_y) * ray->delta_y;
+    }
+    else
+    {
+        ray->step_y = 1;
+        ray->side_y = (cub->player.y + 1.0 - cub->player.y) *
+            ray->delta_y;
+    }
 }
 
-void	draw_player(t_cub *cub)
+void    ray_dda(t_cub *cub, t_ray *ray)
 {
-	int	px;
-	int	py;
-	int	i;
-	int	j;
-
-	px = cub->game.map.player_x * TILE_SIZE + TILE_SIZE / 2;
-	py = cub->game.map.player_y * TILE_SIZE + TILE_SIZE / 2;
-	i = 0;
-	while (i < PLAYER_SIZE)
-	{
-		j = 0;
-		while (j < PLAYER_SIZE)
-		{
-			mlx_pixel_put(cub->mlx, cub->win, px - PLAYER_SIZE /2 +j, py - PLAYER_SIZE /2 +i, 0xFF0000); // red
-																				j++;
-		}
-		i++;
-	}
+    while (!ray->hit)
+    {
+        if (ray->side_x < ray->side_y)
+        {
+            ray->side_x += ray->delta_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_y += ray->delta_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        if (safe_cell(cub, ray->map_y, ray->map_x) == '1')
+            ray->hit = 1;
+    }
 }
 
-void	render_frame(t_cub *cub)
+void    ray_distance(t_cub *cub, t_ray *ray, int h)
 {
-	mlx_clear_window(cub->mlx, cub->win);
+    if (ray->side == 0)
+        ray->perp_dist =
+            (ray->map_x - cub->player.x +
+             (1 - ray->step_x) / 2) / ray->ray_dir_x;
+    else
+        ray->perp_dist =
+            (ray->map_y - cub->player.y +
+             (1 - ray->step_y) / 2) / ray->ray_dir_y;
+    ray->line_h = (int)(h / ray->perp_dist);
+    ray->draw_start = -ray->line_h / 2 + h / 2;
+    if (ray->draw_start < 0)
+        ray->draw_start = 0;
+    ray->draw_end = ray->line_h / 2 + h / 2;
+    if (ray->draw_end >= h)
+        ray->draw_end = h -1;
+}
+void    ray_draw(t_cub *cub, t_ray *ray, int x)
+{
+    int y;
+    int color;
 
-#if DEBUG_2D
-	draw_map_2d(cub);
-	draw_player(cub);
-#else
-	//render_3d_frame(cub);
-#endif
+    color = 0x00FF00;
+    if (ray->side == 1)
+        color = 0x007700;
+    y = ray->draw_start;
+    while (y < ray->draw_end)
+    {
+        img_pixel_put(&cub->img, x, y, color);
+        y++;
+    }
+}
+
+void    render_3d(t_cub *cub)
+{
+    t_ray   ray;
+    int     w;
+    int     h;
+    int     x;
+
+    w = 1200;
+    h = 800;
+    x = 0;
+    clear_image(cub);
+    while (x < w)
+    {
+        ray_init(cub, &ray, x, w);
+        ray_step_calc(cub, &ray);
+        ray_dda(cub, &ray);
+        ray_distance(cub, &ray, h);
+        ray_draw(cub, &ray, x);
+        x++;
+    }
+    mlx_put_image_to_window(
+            cub->mlx, cub->win, cub->img.img, 0, 0);
 }

@@ -1,6 +1,5 @@
 #include "cub3D.h"
 
-// Վերադարձնում է նիշը քարտեզի դիրքում (y,x),վերադարձնում է բացատ եթե դուրս է սահմաններից
 static int	get_char_at(t_map *map, int y, int x)
 {
 	if (!map || !map->grid)
@@ -16,7 +15,6 @@ static int	get_char_at(t_map *map, int y, int x)
 	return ((int)map->grid[y][x]);
 }
 
-// Ազատում է տողերի զանգվածը և ինքը զանգվածը
 void	free_str_array(char **arr)
 {
 	int	i;
@@ -32,7 +30,6 @@ void	free_str_array(char **arr)
 	free(arr);
 }
 
-// Պարսում է RGB գույնի տողը "R,G,B" և վավերացնում է 0-255 տիրույթը (սաբջեքթով)
 int	parse_rgb(char *color_str, int *r, int *g, int *b)
 {
 	char	**values;
@@ -83,7 +80,6 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 	return (1);
 }
 
-// Ստուգում է արդյոք նիշը վավեր է քարտեզում (բացատ, պատ,հատակ,խաղացողի ուղղություններ)
 int	is_map_char(char c)
 {
 	if (c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E'
@@ -92,7 +88,6 @@ int	is_map_char(char c)
 	return (0);
 }
 
-// Ստուգում է արդյոք նիշը պետք է շրջապատվի պատերով (հատակներ և խաղացողներ)
 int	needs_enclosure(char c)
 {
 	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
@@ -100,7 +95,6 @@ int	needs_enclosure(char c)
 	return (0);
 }
 
-// Ստուգում է,որ քարտեզի(y,x)արգումենտները պատշաճ փակված են պատերով բոլոր կողմերից
 int	cell_enclosed(t_map *map, int y, int x)
 {
 	if (!map || !map->grid)
@@ -114,8 +108,6 @@ int	cell_enclosed(t_map *map, int y, int x)
 	return (1);
 }
 
-// Մշակում է մեկ քարտեզի բջիջ. վավերացնում է նիշը,
-// հաշվում է խաղացողներին և ստուգում շրջափակումը
 int	process_cell(t_map *map, int y, int x, int *player_count)
 {
 	char	c;

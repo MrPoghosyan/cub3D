@@ -1,17 +1,8 @@
-#include "engine.h"
+#include "cub3D.h"
 
 int	close_game(t_cub *cub)
 {
-	if (cub->win)
-		mlx_destroy_window(cub->mlx, cub->win);
-#ifdef __linux__
-	if (cub->mlx)
-	{
-		mlx_destroy_display(cub->mlx);
-		free(cub->mlx);
-	}
-#endif
-	free(cub);
+	free_cub(cub);
 	exit(0);
 	return (0);
 }
@@ -28,8 +19,6 @@ int	key_hook(int keycode, t_cub *cub)
 		turn_left(cub);
 	if (keycode == 'd')
 		turn_right(cub);
-#if DEBUG_2D // dellet
-	draw_map_2d(cub);
-#endif
+	render_3d(cub);
 	return (0);
 }

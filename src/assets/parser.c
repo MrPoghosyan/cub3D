@@ -1,6 +1,5 @@
 #include "cub3D.h"
 
-// Նախաբաննա սկզբանավորումա պարսերը և խաղի կառուցվածքները, բացումա ֆայլը
 int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 {
 	p->line = NULL;
@@ -28,7 +27,6 @@ int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 	return (1);
 }
 
-// Կարդում է բոլոր ֆայլի տողերը և մշակում դրանք
 int	read_file_lines(t_parser *p, t_game *game)
 {
 	p->line = get_next_line(p->fd);
@@ -46,7 +44,6 @@ int	read_file_lines(t_parser *p, t_game *game)
 	return (1);
 }
 
-// Ստեղծում է քարտեզի մատրիցը հավաքված տողերից
 int	setup_map(t_parser *p, t_game *game)
 {
 	if (p->map_count == 0)
@@ -61,7 +58,6 @@ int	setup_map(t_parser *p, t_game *game)
 	return (1);
 }
 
-// Վավերացնում է բոլոր պարսված խաղի տվյալները (տեքստուրաներ և քարտեզ)
 int	validate_game_data(t_game *game)
 {
 	if (!validate_textures(&game->textures))
@@ -77,7 +73,6 @@ int	validate_game_data(t_game *game)
 	return (1);
 }
 
-// Կարդում է ֆայլը և վավերացնում բոլոր տվյալները
 int	read_and_validate(t_parser *p, t_game *game)
 {
 	if (!read_file_lines(p, game))
@@ -88,8 +83,6 @@ int	read_and_validate(t_parser *p, t_game *game)
 		return (0);
 	return (1);
 }
-
-// Հիմնական ֆունկցիա՝ .cub ֆայլը վերածում է `t_game` կառուցվածքի
 
 int	parse_game(const char *path, t_game *game)
 {

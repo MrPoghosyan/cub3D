@@ -1,6 +1,5 @@
 #include "cub3D.h"
 
-// Ձախ կողմի բացատները կտրում է տողից
 static char	*str_trim_left(char *s)
 {
 	while (*s && (*s == ' ' || *s == '\t'))
@@ -8,7 +7,6 @@ static char	*str_trim_left(char *s)
 	return (s);
 }
 
-// Պարսում է header տողերը (NO, SO, WE, EA, F, C) և պահում խաղի կառուցվածքում
 int	parse_header_line(char *t, t_game *game)
 {
 	char	*v;
@@ -88,8 +86,6 @@ int	parse_header_line(char *t, t_game *game)
 	return (0);
 }
 
-// Ավելացնում է քարտեզի տող պարսերի map_lines զանգվածին,ընդլայնելով անհրաժեշտության դեպքում
-
 int	append_map_line(t_parser *p, char *s)
 {
 	char	*copy;
@@ -139,7 +135,6 @@ void	compute_map_width(t_parser *p, t_game *game)
 	game->map.width = maxw;
 }
 
-// Հիմնական օղակ՝ կարդում և մշակում է յուրաքանչյուր տողը ֆայլից
 int	read_lines(t_parser *p, t_game *game)
 {
 	char	*next;
