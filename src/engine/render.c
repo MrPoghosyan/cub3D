@@ -91,7 +91,7 @@ void    render_3d(t_cub *cub)
     w = 1200;
     h = 800;
     x = 0;
-    clear_image(cub);
+    clear_image(cub, w, h);
     while (x < w)
     {
         ray_init(cub, &ray, x, w);
@@ -101,6 +101,4 @@ void    render_3d(t_cub *cub)
         ray_draw(cub, &ray, x);
         x++;
     }
-    mlx_put_image_to_window(
-            cub->mlx, cub->win, cub->img.img, 0, 0);
 }

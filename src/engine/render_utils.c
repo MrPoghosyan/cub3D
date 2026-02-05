@@ -11,20 +11,18 @@ void	img_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	clear_image(t_cub *cub)
+void	clear_image(t_cub *cub, int w, int h)
 {
-    int x = 0;
+    int x;
     int y;
 
-    while (x < 1200)
+    x = 0;
+    while (x < w)
     {
         y = 0;
-        while (y < 800)
+        while (y < h)
         {
-            if (y < 400)
-                img_pixel_put(&cub->img, x, y, 0x87CEEB); // ceiling
-            else
-                img_pixel_put(&cub->img, x, y, 0x444444); // floor
+            img_pixel_put(&cub->img, x, y, 0x87CEEB); // ceiling
             y++;
         }
         x++;

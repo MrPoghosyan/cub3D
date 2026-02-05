@@ -18,25 +18,28 @@ t_cub	*init_game(char *path)
 
 void	engine_init(t_cub *cub)
 {
+	int	size;
+	int	i;
+
+	size = 800 * cub->img.line_length;
+	i = 0;
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
 		err("mlx_init failed");
 	cub->win = mlx_new_window(cub->mlx, 1200, 800, "cub3D");
 	if (!cub->win)
 		err("mlx_new_window failed");
-	int size = 800 * cub->img.line_length;
-	int i = 0;
-	while (i < size)
-	{
-		cub->img.addr[i] = 0;
-		i++;
-	}
 	cub->img.img = mlx_new_image(cub->mlx, 1200, 800);
 	cub->img.addr = mlx_get_data_addr(
 			cub->img.img,
 			&cub->img.bits_per_pixel,
 			&cub->img.line_length,
 			&cub->img.endian);
+	while (i < size)
+	{
+		cub->img.addr[i] = 0;
+		i++;
+	}
 	mlx_hook(cub->win, 2, 1L << 0, key_hook, cub); // ESC key
 	mlx_hook(cub->win, 17, 0, close_game, cub);     // close window button
 	mlx_loop_hook(cub->mlx, engine_loop, cub);

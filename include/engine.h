@@ -30,11 +30,13 @@ int		close_game(t_cub *cub);
 /* ========= MOVE 3D ======== */
 void	move_forward(t_cub *cub);
 void	move_backward(t_cub *cub);
+void	move_left(t_cub *cub);
+void	move_right(t_cub *cub);
 void	turn_left(t_cub *cub);
 void	turn_right(t_cub *cub);
 
 /* ========= UTILS ========== */
-void	clear_image(t_cub *cub);
+void	clear_image(t_cub *cub, int w, int h);
 void	img_pixel_put(t_img *img, int x, int y, int color);
 
 #endif
