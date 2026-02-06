@@ -21,7 +21,7 @@ void    ray_step_calc(t_cub *cub, t_ray *ray)
     else
     {
         ray->step_y = 1;
-        ray->side_y = (cub->player.y + 1.0 - cub->player.y) *
+        ray->side_y = (ray->map_y + 1.0 - cub->player.y) *
             ray->delta_y;
     }
 }

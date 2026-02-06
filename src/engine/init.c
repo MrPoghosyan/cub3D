@@ -21,8 +21,6 @@ void	engine_init(t_cub *cub)
 	int	size;
 	int	i;
 
-	size = 800 * cub->img.line_length;
-	i = 0;
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
 		err("mlx_init failed");
@@ -35,6 +33,8 @@ void	engine_init(t_cub *cub)
 			&cub->img.bits_per_pixel,
 			&cub->img.line_length,
 			&cub->img.endian);
+	size = 800 * cub->img.line_length;
+	i = 0;
 	while (i < size)
 	{
 		cub->img.addr[i] = 0;
