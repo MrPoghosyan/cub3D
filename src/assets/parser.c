@@ -1,22 +1,20 @@
 #include "cub3D.h"
 
-// Նախաբաննա սկզբանավորումա պարսերը և խաղի կառուցվածքները, բացումա ֆայլը
 int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 {
 	p->line = NULL;
-	p->len = 0;
 	p->map_lines = NULL;
 	p->map_count = 0;
 	p->in_map = 0;
 	if (!path || !game)
 	{
-		fprintf(stderr, "Error\nparse_game: invalid arguments\n");
+		print_err("parse_game: invalid arguments");
 		return (0);
 	}
-	p->f = fopen(path, "r");
-	if (!p->f)
+	p->fd = open(path, O_RDONLY);
+	if (p->fd < 0)
 	{
-		fprintf(stderr, "Error\nparse_game: failed to open file %s\n", path);
+		printf("Error\nparse_game: failed to open file %s\n", path);
 		return (0);
 	}
 	game->textures.no = NULL;
@@ -29,30 +27,29 @@ int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 	return (1);
 }
 
-// Կարդում է բոլոր ֆայլի տողերը և մշակում դրանք
 int	read_file_lines(t_parser *p, t_game *game)
 {
-	p->rd = getline(&p->line, &p->len, p->f);
+	p->line = get_next_line(p->fd);
+	p->rd = (p->line != NULL);
 	if (!read_lines(p, game))
 	{
-		fclose(p->f);
+		close(p->fd);
 		free(p->line);
 		free_str_array(p->map_lines);
-		fprintf(stderr, "Error\nparse_game: read_lines failed\n");
+		print_err("parse_game: read_lines failed");
 		return (0);
 	}
 	free(p->line);
-	fclose(p->f);
+	close(p->fd);
 	return (1);
 }
 
-// Ստեղծում է քարտեզի մատրիցը հավաքված տողերից
 int	setup_map(t_parser *p, t_game *game)
 {
 	if (p->map_count == 0)
 	{
 		free_str_array(p->map_lines);
-		fprintf(stderr, "Error\nparse_game: no map data found\n");
+		print_err("parse_game: no map data found");
 		return (0);
 	}
 	game->map.grid = p->map_lines;
@@ -61,23 +58,21 @@ int	setup_map(t_parser *p, t_game *game)
 	return (1);
 }
 
-// Վավերացնում է բոլոր պարսված խաղի տվյալները (տեքստուրաներ և քարտեզ)
 int	validate_game_data(t_game *game)
 {
 	if (!validate_textures(&game->textures))
 	{
-		fprintf(stderr, "Error\nparse_game: texture validation failed\n");
+		print_err("parse_game: texture validation failed");
 		return (0);
 	}
 	if (!validate_map(&game->map))
 	{
-		fprintf(stderr, "Error\nparse_game: map validation failed\n");
+		print_err("parse_game: map validation failed");
 		return (0);
 	}
 	return (1);
 }
 
-// Կարդում է ֆայլը և վավերացնում բոլոր տվյալները
 int	read_and_validate(t_parser *p, t_game *game)
 {
 	if (!read_file_lines(p, game))
@@ -89,7 +84,6 @@ int	read_and_validate(t_parser *p, t_game *game)
 	return (1);
 }
 
-// Հիմնական ֆունկցիա՝ .cub ֆայլը վերածում է `t_game` կառուցվածքի
 int	parse_game(const char *path, t_game *game)
 {
 	t_parser	p;

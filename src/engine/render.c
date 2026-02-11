@@ -1,81 +1,104 @@
-#include "engine.h"
+#include "cub3D.h"
 
-static void	draw_rect(t_cub *cub, int x, int y, int color)
+void    ray_step_calc(t_cub *cub, t_ray *ray)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < TILE_SIZE)
-	{
-		j = 0;
-		while (j < TILE_SIZE)
-		{
-			mlx_pixel_put(cub->mlx, cub->win, x + j, y + i, color);
-			++j;
-		}
-		++i;
-	}
+    if (ray->ray_dir_x < 0)
+    {
+        ray->step_x = -1;
+        ray->side_x = (cub->player.x - ray->map_x) * ray->delta_x;
+    }
+    else
+    {
+        ray->step_x = 1;
+        ray->side_x = (ray->map_x + 1.0 - cub->player.x) *
+            ray->delta_x;
+    }
+    if (ray->ray_dir_y < 0)
+    {
+        ray->step_y = -1;
+        ray->side_y = (cub->player.y - ray->map_y) * ray->delta_y;
+    }
+    else
+    {
+        ray->step_y = 1;
+        ray->side_y = (ray->map_y + 1.0 - cub->player.y) *
+            ray->delta_y;
+    }
 }
 
-void	draw_map_2d(t_cub *cub)
+void    ray_dda(t_cub *cub, t_ray *ray)
 {
-	int y, x;
-	int px, py;
-	t_map *map = &cub->game.map;
-
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			px = x * TILE_SIZE;
-			py = y * TILE_SIZE;
-			char c = map->grid[y][x];
-
-			if (c == '1')          // Wall
-				draw_rect(cub, px, py, 0x808080); // grey
-			else if (c == '0')     // Empty floor
-				draw_rect(cub, px, py, 0x000000); // black
-			else if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-				draw_rect(cub, px, py, 0x000000); // piayer will be drawn later
-			++x;
-		}
-		++y;
-	}
+    while (!ray->hit)
+    {
+        if (ray->side_x < ray->side_y)
+        {
+            ray->side_x += ray->delta_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_y += ray->delta_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        if (safe_cell(cub, ray->map_y, ray->map_x) == '1')
+            ray->hit = 1;
+    }
 }
 
-void	draw_player(t_cub *cub)
+void    ray_distance(t_cub *cub, t_ray *ray, int h)
 {
-	int	px;
-	int	py;
-	int	i;
-	int	j;
+    if (ray->side == 0)
+        ray->perp_dist =
+            (ray->map_x - cub->player.x +
+             (1 - ray->step_x) / 2) / ray->ray_dir_x;
+    else
+        ray->perp_dist =
+            (ray->map_y - cub->player.y +
+             (1 - ray->step_y) / 2) / ray->ray_dir_y;
+    ray->line_h = (int)(h / ray->perp_dist);
+    ray->draw_start = -ray->line_h / 2 + h / 2;
+    if (ray->draw_start < 0)
+        ray->draw_start = 0;
+    ray->draw_end = ray->line_h / 2 + h / 2;
+    if (ray->draw_end >= h)
+        ray->draw_end = h -1;
+}
+void    ray_draw(t_cub *cub, t_ray *ray, int x)
+{
+    int y;
+    int color;
 
-	px = cub->game.map.player_x * TILE_SIZE + TILE_SIZE / 2;
-	py = cub->game.map.player_y * TILE_SIZE + TILE_SIZE / 2;
-	i = 0;
-	while (i < PLAYER_SIZE)
-	{
-		j = 0;
-		while (j < PLAYER_SIZE)
-		{
-			mlx_pixel_put(cub->mlx, cub->win, px - PLAYER_SIZE /2 +j, py - PLAYER_SIZE /2 +i, 0xFF0000); // red
-																				j++;
-		}
-		i++;
-	}
+    color = 0x00FF00;
+    if (ray->side == 1)
+        color = 0x007700;
+    y = ray->draw_start;
+    while (y < ray->draw_end)
+    {
+        img_pixel_put(&cub->img, x, y, color);
+        y++;
+    }
 }
 
-void	render_frame(t_cub *cub)
+void    render_3d(t_cub *cub)
 {
-	mlx_clear_window(cub->mlx, cub->win);
+    t_ray   ray;
+    int     w;
+    int     h;
+    int     x;
 
-#if DEBUG_2D
-	draw_map_2d(cub);
-	draw_player(cub);
-#else
-	//render_3d_frame(cub);
-#endif
+    w = 1200;
+    h = 800;
+    x = 0;
+    clear_image(cub, w, h);
+    while (x < w)
+    {
+        ray_init(cub, &ray, x, w);
+        ray_step_calc(cub, &ray);
+        ray_dda(cub, &ray);
+        ray_distance(cub, &ray, h);
+        ray_draw(cub, &ray, x);
+        x++;
+    }
 }

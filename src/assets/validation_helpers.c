@@ -1,6 +1,5 @@
 #include "cub3D.h"
 
-// Վերադարձնում է նիշը քարտեզի դիրքում (y,x),վերադարձնում է բացատ եթե դուրս է սահմաններից
 static int	get_char_at(t_map *map, int y, int x)
 {
 	if (!map || !map->grid)
@@ -16,7 +15,6 @@ static int	get_char_at(t_map *map, int y, int x)
 	return ((int)map->grid[y][x]);
 }
 
-// Ազատում է տողերի զանգվածը և ինքը զանգվածը
 void	free_str_array(char **arr)
 {
 	int	i;
@@ -32,7 +30,6 @@ void	free_str_array(char **arr)
 	free(arr);
 }
 
-// Պարսում է RGB գույնի տողը "R,G,B" և վավերացնում է 0-255 տիրույթը (սաբջեքթով)
 int	parse_rgb(char *color_str, int *r, int *g, int *b)
 {
 	char	**values;
@@ -42,20 +39,19 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 
 	if (!color_str || !r || !g || !b)
 	{
-		fprintf(stderr, "Error\nInvalid color string or NULL target\n");
+		print_err("Invalid color string or NULL target");
 		return (0);
 	}
 	values = ft_split(color_str, ',');
 	if (!values)
 	{
-		fprintf(stderr, "Error\nFailed to split color string\n");
+		print_err("Failed to split color string");
 		return (0);
 	}
 	if (!values[0] || !values[1] || !values[2] || values[3])
 	{
 		free_str_array(values);
-		fprintf(stderr,
-			"Error\nColor must have exactly 3 comma-separated values\n");
+		print_err("Color must have exactly 3 comma-separated values");
 		return (0);
 	}
 	t0 = ft_strtrim(values[0], " \t\n");
@@ -67,7 +63,7 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 		free(t0);
 		free(t1);
 		free(t2);
-		fprintf(stderr, "Error\nFailed to trim color components\n");
+		print_err("Failed to trim color components");
 		return (0);
 	}
 	*r = ft_atoi(t0);
@@ -78,13 +74,12 @@ int	parse_rgb(char *color_str, int *r, int *g, int *b)
 	free(t2);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
 	{
-		fprintf(stderr, "Error\n (got %d,%d,%d)\n", *r, *g, *b);
+		printf("Error\n (got %d,%d,%d)\n", *r, *g, *b);
 		return (0);
 	}
 	return (1);
 }
 
-// Ստուգում է արդյոք նիշը վավեր է քարտեզում (բացատ, պատ,հատակ,խաղացողի ուղղություններ)
 int	is_map_char(char c)
 {
 	if (c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E'
@@ -93,7 +88,6 @@ int	is_map_char(char c)
 	return (0);
 }
 
-// Ստուգում է արդյոք նիշը պետք է շրջապատվի պատերով (հատակներ և խաղացողներ)
 int	needs_enclosure(char c)
 {
 	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
@@ -101,7 +95,6 @@ int	needs_enclosure(char c)
 	return (0);
 }
 
-// Ստուգում է,որ քարտեզի(y,x)արգումենտները պատշաճ փակված են պատերով բոլոր կողմերից
 int	cell_enclosed(t_map *map, int y, int x)
 {
 	if (!map || !map->grid)
@@ -115,8 +108,6 @@ int	cell_enclosed(t_map *map, int y, int x)
 	return (1);
 }
 
-// Մշակում է մեկ քարտեզի բջիջ. վավերացնում է նիշը,
-// հաշվում է խաղացողներին և ստուգում շրջափակումը
 int	process_cell(t_map *map, int y, int x, int *player_count)
 {
 	char	c;
@@ -126,7 +117,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 		c = ' ';
 	if (!is_map_char(c))
 	{
-		fprintf(stderr, "Error\nInvalid map character '%c' at (%d,%d)\n", c, y,
+		printf("Error\nInvalid map character '%c' at (%d,%d)\n", c, y,
 			x);
 		return (0);
 	}
@@ -141,7 +132,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 	{
 		if (!cell_enclosed(map, y, x))
 		{
-			fprintf(stderr, "Error\nMap cell at (%d,%d) is not enclosed\n", y,
+			printf("Error\nMap cell at (%d,%d) is not enclosed\n", y,
 				x);
 			return (0);
 		}
