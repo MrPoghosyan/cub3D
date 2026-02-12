@@ -1,0 +1,65 @@
+#include "cub3D.h"
+
+static double  calc_wall_x(t_cub *cub, t_ray *ray)
+{
+    double  wall_x;
+
+    if (ray->side == 0)
+        wall_x = cub->player.y + ray->perp_dist * ray->ray_dir_y;
+    else
+        wall_x = cub->player.x + ray->perp_dist * ray->ray_dir_x;
+    return (wall_x - floor(wall_x));
+}
+
+static int calc_tex_x(t_cub *cub, t_ray *ray, t_tex_img *tex)
+{
+    double  wall_x;
+    int     tex_x;
+
+    wall_x = calc_wall_x(cub, ray);
+    tex_x = (int)(wall_x * tex->width);
+    if (ray->side == 0 && ray->ray_dir_x > 0)
+        tex_x = tex->width - tex_x - 1;
+    if (ray->side == 1 && ray->ray_dir_y < 0)
+        tex_x = tex->width - tex_x - 1;
+    return (tex_x);
+}
+
+static void init_tex_step(t_ray *ray, t_tex_img *tex,
+                   double *step, double *tex_pos, int h)
+{
+    *step = 1.0 * tex->height / ray->line_h;
+    *tex_pos = (ray->draw_start - h / 2
+        + ray->line_h / 2) * (*step);
+}
+
+static void draw_wall_column(t_cub *cub, t_ray *ray,
+                      t_tex_img *tex, int x)
+{
+    double  tex_pos;
+    double  step;
+    int     tex_y;
+    int     y;
+    int     color;
+
+    init_tex_step(ray, tex, &step, &tex_pos, 800);
+    y = ray->draw_start;
+    while (y < ray->draw_end)
+    {
+        tex_y = (int)tex_pos & (tex->height - 1);
+        tex_pos += step;
+        color = get_tex_pixel(tex, ray->tex_x, tex_y);
+        img_pixel_put(&cub->img, x, y, color);
+        y++;
+    }
+}
+
+void ray_draw(t_cub *cub, t_ray *ray, int x, int h)
+{
+    t_tex_img  *tex;
+
+    draw_floor_ceiling(cub, x, h);
+    tex = select_texture(cub, ray);
+    ray->tex_x = calc_tex_x(cub, ray, tex);
+    draw_wall_column(cub, ray, tex, x);
+}
