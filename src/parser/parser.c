@@ -17,10 +17,10 @@ int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
 		printf("Error\nparse_game: failed to open file %s\n", path);
 		return (0);
 	}
-	game->textures.no = NULL;
-	game->textures.so = NULL;
-	game->textures.we = NULL;
-	game->textures.ea = NULL;
+	game->textures.no_path = NULL;
+	game->textures.so_path = NULL;
+	game->textures.we_path = NULL;
+	game->textures.ea_path = NULL;
 	game->map.grid = NULL;
 	game->map.width = 0;
 	game->map.height = 0;

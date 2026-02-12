@@ -35,17 +35,18 @@ SRC			= \
 			$(SRC_DIR)/main.c \
 			$(SRC_DIR)/assets/error.c \
 			$(SRC_DIR)/assets/free.c \
-			$(SRC_DIR)/assets/parser.c \
-			$(SRC_DIR)/assets/parser_helpers.c \
 			$(SRC_DIR)/assets/validation.c \
 			$(SRC_DIR)/assets/validation_helpers.c \
 			$(SRC_DIR)/assets/utils.c \
+			$(SRC_DIR)/parser/parser.c \
+			$(SRC_DIR)/parser/parser_helpers.c \
 			$(SRC_DIR)/engine/engine.c \
 			$(SRC_DIR)/engine/hooks.c \
 			$(SRC_DIR)/engine/init.c \
-			$(SRC_DIR)/engine/render.c \
-			$(SRC_DIR)/engine/render_utils.c \
-			$(SRC_DIR)/engine/movement.c 
+			$(SRC_DIR)/engine/movement.c \
+			$(SRC_DIR)/render/render.c \
+			$(SRC_DIR)/render/render_utils.c
+
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # ----------------------------- RULES ---------------------------------------- #

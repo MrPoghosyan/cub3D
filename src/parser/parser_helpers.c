@@ -18,7 +18,7 @@ int	parse_header_line(char *t, t_game *game)
 		{
 			err("Memory allocation failed for texture NO");
 		}
-		game->textures.no = v;
+		game->textures.no_path = v;
 		return (1);
 	}
 	if (t[0] == 'S' && t[1] == 'O' && t[2] == ' ')
@@ -28,7 +28,7 @@ int	parse_header_line(char *t, t_game *game)
 		{
 			err("Memory allocation failed for texture SO");
 		}
-		game->textures.so = v;
+		game->textures.so_path = v;
 		return (1);
 	}
 	if (t[0] == 'W' && t[1] == 'E' && t[2] == ' ')
@@ -38,7 +38,7 @@ int	parse_header_line(char *t, t_game *game)
 		{
 			err("Memory allocation failed for texture WE");
 		}
-		game->textures.we = v;
+		game->textures.we_path = v;
 		return (1);
 	}
 	if (t[0] == 'E' && t[1] == 'A' && t[2] == ' ')
@@ -48,7 +48,7 @@ int	parse_header_line(char *t, t_game *game)
 		{
 			err("Memory allocation failed for texture EA");
 		}
-		game->textures.ea = v;
+		game->textures.ea_path = v;
 		return (1);
 	}
 	if (t[0] == 'F' && t[1] == ' ')
