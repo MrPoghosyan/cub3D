@@ -23,6 +23,7 @@ void	render_frame(t_cub *cub);
 void	render_3d(t_cub *cub);
 void	draw_player(t_cub *cub);
 void	ray_draw(t_cub *cub, t_ray *ray, int x, int h);
+int		apply_shade(int color, double factor);
 
 /* ========= INPUT ========== */
 int		key_hook(int keycode, t_cub *cub);
