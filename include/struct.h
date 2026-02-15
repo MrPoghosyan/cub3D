@@ -14,6 +14,7 @@ typedef struct	s_ray
 {
 	double	ray_dir_x;
 	double	ray_dir_y;
+	int		tex_x;
 	int		map_x;
 	int		map_y;
 	double	delta_x;

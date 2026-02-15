@@ -45,7 +45,10 @@ SRC			= \
 			$(SRC_DIR)/engine/init.c \
 			$(SRC_DIR)/engine/movement.c \
 			$(SRC_DIR)/render/render.c \
-			$(SRC_DIR)/render/render_utils.c
+			$(SRC_DIR)/render/render_texture.c \
+			$(SRC_DIR)/render/render_utils.c \
+			$(SRC_DIR)/texture/texture_load.c \
+			$(SRC_DIR)/texture/texture_utils.c
 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

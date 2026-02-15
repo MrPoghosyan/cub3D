@@ -11,6 +11,13 @@ void	img_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+int color_to_int(t_color c)
+{
+    return ((c.r & 0xFF) << 16) |
+           ((c.g & 0xFF) << 8)  |
+           (c.b & 0xFF);
+}
+
 void	clear_image(t_cub *cub, int w, int h)
 {
     int x;
@@ -22,9 +29,20 @@ void	clear_image(t_cub *cub, int w, int h)
         y = 0;
         while (y < h)
         {
-            img_pixel_put(&cub->img, x, y, 0x87CEEB); // ceiling
+            img_pixel_put(&cub->img, x, y,
+                    color_to_int(cub->game.ceiling_color)); // ceiling
             y++;
         }
         x++;
     }
+}
+
+double  my_floor(double x)
+{
+    int i;
+
+    i = (int)x;
+    if (x < 0 && x != i)
+        return (i - 1);
+    return (i);
 }

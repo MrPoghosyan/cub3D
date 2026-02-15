@@ -12,5 +12,6 @@
 # include "struct.h"
 # include "assets.h"
 # include "engine.h"
+# include "texture.h"
 
 #endif

@@ -65,21 +65,6 @@ void    ray_distance(t_cub *cub, t_ray *ray, int h)
     if (ray->draw_end >= h)
         ray->draw_end = h -1;
 }
-void    ray_draw(t_cub *cub, t_ray *ray, int x)
-{
-    int y;
-    int color;
-
-    color = 0x00FF00;
-    if (ray->side == 1)
-        color = 0x007700;
-    y = ray->draw_start;
-    while (y < ray->draw_end)
-    {
-        img_pixel_put(&cub->img, x, y, color);
-        y++;
-    }
-}
 
 void    render_3d(t_cub *cub)
 {
@@ -98,7 +83,7 @@ void    render_3d(t_cub *cub)
         ray_step_calc(cub, &ray);
         ray_dda(cub, &ray);
         ray_distance(cub, &ray, h);
-        ray_draw(cub, &ray, x);
+        ray_draw(cub, &ray, x, h);
         x++;
     }
 }

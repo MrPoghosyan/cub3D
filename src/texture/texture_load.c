@@ -15,7 +15,8 @@ static int load_one(t_cub *cub, t_tex_img *tex, char *path)
             &tex->bpp,
             &tex->line_len,
             &tex->endian);
-
+    if (!tex->addr)
+        return (0);
     return (1);
 }
 

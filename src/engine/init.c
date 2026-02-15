@@ -43,6 +43,8 @@ void	engine_init(t_cub *cub)
 	mlx_hook(cub->win, 2, 1L << 0, key_hook, cub); // ESC key
 	mlx_hook(cub->win, 17, 0, close_game, cub);     // close window button
 	mlx_loop_hook(cub->mlx, engine_loop, cub);
+	if (!load_textures(cub))
+		err("Texture load failed");
 }
 
 static void	set_dir_ns(t_cub *cub, char d)

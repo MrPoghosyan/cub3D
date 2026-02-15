@@ -8,7 +8,7 @@ static double  calc_wall_x(t_cub *cub, t_ray *ray)
         wall_x = cub->player.y + ray->perp_dist * ray->ray_dir_y;
     else
         wall_x = cub->player.x + ray->perp_dist * ray->ray_dir_x;
-    return (wall_x - floor(wall_x));
+    return (wall_x - my_floor(wall_x));
 }
 
 static int calc_tex_x(t_cub *cub, t_ray *ray, t_tex_img *tex)
@@ -50,6 +50,26 @@ static void draw_wall_column(t_cub *cub, t_ray *ray,
         tex_pos += step;
         color = get_tex_pixel(tex, ray->tex_x, tex_y);
         img_pixel_put(&cub->img, x, y, color);
+        y++;
+    }
+}
+
+static void draw_floor_ceiling(t_cub *cub, int x, int h)
+{
+    int y;
+    int ceil_color;
+    int floor_color;
+
+    ceil_color = color_to_int(cub->game.ceiling_color);
+    floor_color = color_to_int(cub->game.floor_color);
+
+    y = 0;
+    while (y < h)
+    {
+        if (y < h / 2)
+            img_pixel_put(&cub->img, x, y, ceil_color);
+        else
+            img_pixel_put(&cub->img, x, y, floor_color);
         y++;
     }
 }

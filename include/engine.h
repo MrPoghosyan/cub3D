@@ -22,6 +22,7 @@ void	render_frame(t_cub *cub);
 /* ========= RENDER ========= */
 void	render_3d(t_cub *cub);
 void	draw_player(t_cub *cub);
+void	ray_draw(t_cub *cub, t_ray *ray, int x, int h);
 
 /* ========= INPUT ========== */
 int		key_hook(int keycode, t_cub *cub);
@@ -38,5 +39,7 @@ void	turn_right(t_cub *cub);
 /* ========= UTILS ========== */
 void	clear_image(t_cub *cub, int w, int h);
 void	img_pixel_put(t_img *img, int x, int y, int color);
+double  my_floor(double x);
+int		color_to_int(t_color c);
 
 #endif
