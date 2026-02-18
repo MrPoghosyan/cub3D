@@ -10,7 +10,7 @@ int	close_game(t_cub *cub)
 int	key_hook(int keycode, t_cub *cub)
 {
 	if (keycode == 65307) // ESC
-		return close_game(cub);
+		return (close_game(cub));
 	if (keycode == 'w')
 		move_forward(cub);
 	if (keycode == 's')
@@ -23,6 +23,5 @@ int	key_hook(int keycode, t_cub *cub)
 		turn_left(cub);
 	if (keycode == 65363) // -->
 		turn_right(cub);
-		
 	return (0);
 }

@@ -117,8 +117,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 		c = ' ';
 	if (!is_map_char(c))
 	{
-		printf("Error\nInvalid map character '%c' at (%d,%d)\n", c, y,
-			x);
+		printf("Error\nInvalid map character '%c' at (%d,%d)\n", c, y, x);
 		return (0);
 	}
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
@@ -132,8 +131,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 	{
 		if (!cell_enclosed(map, y, x))
 		{
-			printf("Error\nMap cell at (%d,%d) is not enclosed\n", y,
-				x);
+			printf("Error\nMap cell at (%d,%d) is not enclosed\n", y, x);
 			return (0);
 		}
 	}
