@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/18 00:00:00 by natalieyan        #+#    #+#             */
+/*   Updated: 2026/02/18 17:40:52 by natalieyan       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
 static void	free_map(t_map *map)
@@ -20,7 +32,6 @@ static void	free_textures(t_cub *cub)
 	t_texture	*t;
 
 	t = &cub->game.textures;
-	/* free texture paths (malloc-ed strings) */
 	if (t->no_path)
 		free(t->no_path);
 	if (t->so_path)
@@ -29,7 +40,6 @@ static void	free_textures(t_cub *cub)
 		free(t->we_path);
 	if (t->ea_path)
 		free(t->ea_path);
-	/* destroy mlx images */
 	if (t->no.img)
 		mlx_destroy_image(cub->mlx, t->no.img);
 	if (t->so.img)
@@ -39,6 +49,22 @@ static void	free_textures(t_cub *cub)
 	if (t->ea.img)
 		mlx_destroy_image(cub->mlx, t->ea.img);
 }
+
+#ifdef __linux__
+static void	free_mlx_display(void *mlx)
+{
+	if (mlx)
+	{
+		mlx_destroy_display(mlx);
+		free(mlx);
+	}
+}
+#else
+static void	free_mlx_display(void *mlx)
+{
+	(void)mlx;
+}
+#endif
 
 void	free_cub(t_cub *cub)
 {
@@ -50,12 +76,21 @@ void	free_cub(t_cub *cub)
 		mlx_destroy_image(cub->mlx, cub->img.img);
 	if (cub->win)
 		mlx_destroy_window(cub->mlx, cub->win);
-#ifdef __linux__
-	if (cub->mlx)
-	{
-		mlx_destroy_display(cub->mlx);
-		free(cub->mlx);
-	}
-#endif
+	free_mlx_display(cub->mlx);
 	free(cub);
+}
+
+void	free_str_array(char **arr)
+{
+	int	i;
+
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
