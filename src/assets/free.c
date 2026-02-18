@@ -6,7 +6,7 @@
 /*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 00:00:00 by natalieyan        #+#    #+#             */
-/*   Updated: 2026/02/18 17:40:52 by natalieyan       ###   ########.fr       */
+/*   Updated: 2026/02/19 03:11:49 by natalieyan       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,4 @@ void	free_cub(t_cub *cub)
 		mlx_destroy_window(cub->mlx, cub->win);
 	free_mlx_display(cub->mlx);
 	free(cub);
-}
-
-void	free_str_array(char **arr)
-{
-	int	i;
-
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
 }

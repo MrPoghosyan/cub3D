@@ -39,6 +39,7 @@ SRC			= \
 			$(SRC_DIR)/assets/validation_helpers.c \
 			$(SRC_DIR)/assets/utils.c \
 			$(SRC_DIR)/parser/parser.c \
+			$(SRC_DIR)/parser/parser_help.c \
 			$(SRC_DIR)/parser/parser_helpers.c \
 			$(SRC_DIR)/engine/engine.c \
 			$(SRC_DIR)/engine/hooks.c \

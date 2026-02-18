@@ -17,3 +17,18 @@ int	safe_cell(t_cub *cub, int y, int x)
 		return (0);
 	return (cub->game.map.grid[y][x]);
 }
+
+void	free_str_array(char **arr)
+{
+	int	i;
+
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
