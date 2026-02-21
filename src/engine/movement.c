@@ -1,5 +1,21 @@
 #include "cub3D.h"
 
+static int	is_walkable(t_cub *cub, double x, double y)
+{
+	int	map_x;
+	int	map_y;
+
+	map_x = (int)x;
+	map_y = (int)y;
+	if (map_x < 0 || map_y < 0)
+		return (0);
+	if (map_y >= cub->game.map.height)
+		return (0);
+	if (map_x >= (int)ft_strlen(cub->game.map.grid[map_y]))
+		return (0);
+	return (cub->game.map.grid[map_y][map_x] != '1');
+}
+
 void	move_forward(t_cub *cub)
 {
 	double	new_x;
@@ -7,9 +23,9 @@ void	move_forward(t_cub *cub)
 
 	new_x = cub->player.x + cub->player.dir_x * MOVE_SPEED;
 	new_y = cub->player.y + cub->player.dir_y * MOVE_SPEED;
-	if (cub->game.map.grid[(int)cub->player.y][(int)new_x] != '1')
+	if (is_walkable(cub, new_x, cub->player.y))
 		cub->player.x = new_x;
-	if (cub->game.map.grid[(int)new_y][(int)cub->player.x] != '1')
+	if (is_walkable(cub, cub->player.x, new_y))
 		cub->player.y = new_y;
 }
 
@@ -20,9 +36,9 @@ void	move_backward(t_cub *cub)
 
 	new_x = cub->player.x - cub->player.dir_x * MOVE_SPEED;
 	new_y = cub->player.y - cub->player.dir_y * MOVE_SPEED;
-	if (cub->game.map.grid[(int)cub->player.y][(int)new_x] != '1')
+	if (is_walkable(cub, new_x, cub->player.y))
 		cub->player.x = new_x;
-	if (cub->game.map.grid[(int)new_y][(int)cub->player.x] != '1')
+	if (is_walkable(cub, cub->player.x, new_y))
 		cub->player.y = new_y;
 }
 
@@ -33,9 +49,9 @@ void	move_left(t_cub *cub)
 
 	new_x = cub->player.x - cub->player.plane_x * MOVE_SPEED;
 	new_y = cub->player.y - cub->player.plane_y * MOVE_SPEED;
-	if (cub->game.map.grid[(int)cub->player.y][(int)new_x] != '1')
+	if (is_walkable(cub, new_x, cub->player.y))
 		cub->player.x = new_x;
-	if (cub->game.map.grid[(int)new_y][(int)cub->player.x] != '1')
+	if (is_walkable(cub, cub->player.x, new_y))
 		cub->player.y = new_y;
 }
 
@@ -46,9 +62,9 @@ void	move_right(t_cub *cub)
 
 	new_x = cub->player.x + cub->player.plane_x * MOVE_SPEED;
 	new_y = cub->player.y + cub->player.plane_y * MOVE_SPEED;
-	if (cub->game.map.grid[(int)cub->player.y][(int)new_x] != '1')
+	if (is_walkable(cub, new_x, cub->player.y))
 		cub->player.x = new_x;
-	if (cub->game.map.grid[(int)new_y][(int)cub->player.x] != '1')
+	if (is_walkable(cub, cub->player.x, new_y))
 		cub->player.y = new_y;
 }
 

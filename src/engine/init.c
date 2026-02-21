@@ -39,6 +39,7 @@ void	engine_init(t_cub *cub)
 	}
 	mlx_hook(cub->win, 2, 1L << 0, key_hook, cub); // ESC key
 	mlx_hook(cub->win, 17, 0, close_game, cub);    // close window button
+	mlx_hook(cub->win, 6, 1L << 6, mouse_rot, cub); // mouse movement
 	mlx_loop_hook(cub->mlx, engine_loop, cub);
 	if (!load_textures(cub))
 		err("Texture load failed");

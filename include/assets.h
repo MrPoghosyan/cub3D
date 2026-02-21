@@ -1,6 +1,10 @@
 #ifndef ASSETS_H
 # define ASSETS_H
 
+# include "struct.h"
+
+# include "struct.h"
+
 void	free_str_array(char **arr);
 int		parse_rgb(char *color_str, int *r, int *g, int *b);
 int		is_map_char(char c);
