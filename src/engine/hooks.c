@@ -23,7 +23,7 @@ int	key_hook(int keycode, t_cub *cub)
 		turn_left(cub);
 	if (keycode == 124) // Right arrow (macOS)
 		turn_right(cub);
-	if (keycode == 49) // Spacebar
+	if (keycode == 31) // O (macOS)
 		try_to_open_door(cub);
 	return (0);
 }

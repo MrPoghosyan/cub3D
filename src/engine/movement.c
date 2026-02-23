@@ -13,7 +13,7 @@ static int	is_walkable(t_cub *cub, double x, double y)
 		return (0);
 	if (map_x >= (int)ft_strlen(cub->game.map.grid[map_y]))
 		return (0);
-	return (cub->game.map.grid[map_y][map_x] != '1');
+	return (cub->game.map.grid[map_y][map_x] != '1' && cub->game.map.grid[map_y][map_x] != 'C');
 }
 
 void	move_forward(t_cub *cub)

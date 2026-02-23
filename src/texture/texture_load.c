@@ -28,5 +28,9 @@ int	load_textures(t_cub *cub)
 		return (0);
 	if (!load_one(cub, &t->ea, t->ea_path))
 		return (0);
+	if (!load_one(cub, &t->closed_door, "textures/door.xpm"))
+		return (0);
+	if (!load_one(cub, &t->open_door, "textures/OpenDoor.xpm"))
+		return (0);
 	return (1);
 }

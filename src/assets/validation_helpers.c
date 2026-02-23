@@ -58,7 +58,7 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 	if (c == '\0')
 		c = ' ';
 	if (!(c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E'
-			|| c == 'W'))
+			|| c == 'W' || c == 'C' || c == 'O'))
 	{
 		printf("Error\nInvalid map character '%c' at (%d,%d)\n", c, y, x);
 		return (0);
@@ -70,8 +70,8 @@ int	process_cell(t_map *map, int y, int x, int *player_count)
 		map->player_y = y;
 		map->player_dir = c;
 	}
-	if ((c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		&& !cell_enclosed(map, y, x))
+	if ((c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'C'
+			|| c == 'O') && !cell_enclosed(map, y, x))
 	{
 		printf("Error\nMap cell at (%d,%d) is not enclosed\n", y, x);
 		return (0);

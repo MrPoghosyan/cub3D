@@ -60,6 +60,8 @@ typedef struct s_texture
 	t_tex_img	so;
 	t_tex_img	we;
 	t_tex_img	ea;
+	t_tex_img	closed_door;
+	t_tex_img	open_door;
 }				t_texture;
 
 typedef struct s_map
