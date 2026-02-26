@@ -11,4 +11,5 @@ int	main(int ac, char **av)
 	engine_init(cub);
 	mlx_loop(cub->mlx);
 	free_cub(cub);
+	return (0);
 }

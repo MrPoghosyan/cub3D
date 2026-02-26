@@ -2,8 +2,9 @@
 
 int	close_game(t_cub *cub)
 {
-	free_cub(cub);
-	exit(0);
+	mlx_loop_end(cub->mlx);
+//	free_cub(cub);
+//	exit(0);
 	return (0);
 }
 

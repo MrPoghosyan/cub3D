@@ -48,6 +48,10 @@ static void	free_textures(t_cub *cub)
 		mlx_destroy_image(cub->mlx, t->we.img);
 	if (t->ea.img)
 		mlx_destroy_image(cub->mlx, t->ea.img);
+	if (t->closed_door.img)
+		mlx_destroy_image(cub->mlx, t->closed_door.img);
+	if (t->open_door.img)
+		mlx_destroy_image(cub->mlx, t->open_door.img);
 }
 
 #ifdef __linux__
@@ -71,11 +75,11 @@ void	free_cub(t_cub *cub)
 	if (!cub)
 		return ;
 	free_textures(cub);
-	free_map(&cub->game.map);
 	if (cub->img.img)
 		mlx_destroy_image(cub->mlx, cub->img.img);
 	if (cub->win)
 		mlx_destroy_window(cub->mlx, cub->win);
 	free_mlx_display(cub->mlx);
+	free_map(&cub->game.map);
 	free(cub);
 }
