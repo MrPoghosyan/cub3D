@@ -8,6 +8,29 @@
 # define COS_R 0.99875026039   // cos(0.05)
 # define SIN_R 0.04997916927   // sin(0.05)
 
+#ifdef __APPLE__
+
+# define KEY_ESC 53
+# define KEY_W 13
+# define KEY_S 1
+# define KEY_A 0
+# define KEY_D 2
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
+# define KEY_O 31
+
+#else
+
+# define KEY_ESC 65307
+# define KEY_W 119
+# define KEY_S 115
+# define KEY_A 97
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_O 111
+
+#endif
 
 /* ========== INIT ========== */
 void	engine_init(t_cub *cub);

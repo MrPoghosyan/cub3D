@@ -9,21 +9,21 @@ int	close_game(t_cub *cub)
 
 int	key_hook(int keycode, t_cub *cub)
 {
-	if (keycode == 53) // ESC (macOS)
+	if (keycode == KEY_ESC)
 		return (close_game(cub));
-	if (keycode == 13) // W (macOS)
+	if (keycode == KEY_W)
 		move_forward(cub);
-	if (keycode == 1) // S (macOS)
+	if (keycode == KEY_S)
 		move_backward(cub);
-	if (keycode == 0) // A (macOS)
+	if (keycode == KEY_A)
 		move_left(cub);
-	if (keycode == 2) // D (macOS)
+	if (keycode == KEY_D)
 		move_right(cub);
-	if (keycode == 123) // Left arrow (macOS)
+	if (keycode == KEY_LEFT)
 		turn_left(cub);
-	if (keycode == 124) // Right arrow (macOS)
+	if (keycode == KEY_RIGHT)
 		turn_right(cub);
-	if (keycode == 31) // O (macOS)
+	if (keycode == KEY_O)
 		try_to_open_door(cub);
 	return (0);
 }
