@@ -1,31 +1,16 @@
-#include "cub3D.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/18 00:00:00 by natalieyan        #+#    #+#             */
+/*   Updated: 2026/02/19 02:56:34 by natalieyan       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	init_parser_and_game(const char *path, t_parser *p, t_game *game)
-{
-	p->line = NULL;
-	p->map_lines = NULL;
-	p->map_count = 0;
-	p->in_map = 0;
-	if (!path || !game)
-	{
-		print_err("parse_game: invalid arguments");
-		return (0);
-	}
-	p->fd = open(path, O_RDONLY);
-	if (p->fd < 0)
-	{
-		printf("Error\nparse_game: failed to open file %s\n", path);
-		return (0);
-	}
-	game->textures.no_path = NULL;
-	game->textures.so_path = NULL;
-	game->textures.we_path = NULL;
-	game->textures.ea_path = NULL;
-	game->map.grid = NULL;
-	game->map.width = 0;
-	game->map.height = 0;
-	return (1);
-}
+#include "cub3D.h"
 
 int	read_file_lines(t_parser *p, t_game *game)
 {

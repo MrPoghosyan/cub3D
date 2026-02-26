@@ -28,8 +28,11 @@ static int	calc_tex_x(t_cub *cub, t_ray *ray, t_tex_img *tex)
 static void	init_tex_step(t_ray *ray, t_tex_img *tex,
 double *step, double *tex_pos)
 {
+	int	h;
+
+	h = 800;
 	*step = 1.0 * tex->height / ray->line_h;
-	*tex_pos = (ray->draw_start - 800 / 2
+	*tex_pos = (ray->draw_start - h / 2
 			+ ray->line_h / 2) * (*step);
 }
 
@@ -57,7 +60,7 @@ t_tex_img *tex, int x)
 	}
 }
 
-static int interpolate(int c1, int c2, double t)
+static int	interpolate(int c1, int c2, double t)
 {
 	int r;
 	int g;
@@ -94,13 +97,12 @@ static void draw_floor_ceiling(t_cub *cub, int x, int screen_h)
 		}
 		else
 			color = floor_color;
-
 		img_pixel_put(&cub->img, x, y, color);
 		y++;
 	}
 }
 
-void ray_draw(t_cub *cub, t_ray *ray, int x, int h)
+void	ray_draw(t_cub *cub, t_ray *ray, int x, int h)
 {
 	t_tex_img  *tex;
 

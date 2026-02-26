@@ -39,6 +39,7 @@ SRC			= \
 			$(SRC_DIR)/assets/validation_helpers.c \
 			$(SRC_DIR)/assets/utils.c \
 			$(SRC_DIR)/parser/parser.c \
+			$(SRC_DIR)/parser/parser_help.c \
 			$(SRC_DIR)/parser/parser_helpers.c \
 			$(SRC_DIR)/engine/engine.c \
 			$(SRC_DIR)/engine/hooks.c \
@@ -48,8 +49,11 @@ SRC			= \
 			$(SRC_DIR)/render/render_texture.c \
 			$(SRC_DIR)/render/render_utils.c \
 			$(SRC_DIR)/texture/texture_load.c \
-			$(SRC_DIR)/texture/texture_utils.c
-
+			$(SRC_DIR)/texture/texture_utils.c \
+			$(SRC_DIR)/bonuses/minimap.c \
+			$(SRC_DIR)/bonuses/rotatemouse.c \
+			$(SRC_DIR)/bonuses/set_gun_textures.c
+			
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # ----------------------------- RULES ---------------------------------------- #
@@ -62,7 +66,7 @@ mlx_libft:
 
 # Build MiniLibX
 mlx_mlx:
-	$(MAKE) -C $(MLX_DIR)
+	$(MAKE) -C $(MLX_DIR)	
 
 # Build executable
 $(NAME): $(OBJ) $(LIBFT_A) $(MLX_A)

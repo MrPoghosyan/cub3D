@@ -1,90 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_helpers.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: natalieyan <natalieyan@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/18 00:00:00 by natalieyan        #+#    #+#             */
+/*   Updated: 2026/02/19 03:06:50 by natalieyan       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
-
-static char	*str_trim_left(char *s)
-{
-	while (*s && (*s == ' ' || *s == '\t'))
-		s++;
-	return (s);
-}
-
-int	parse_header_line(char *t, t_game *game)
-{
-	char	*v;
-
-	if (t[0] == 'N' && t[1] == 'O' && t[2] == ' ')
-	{
-		v = ft_strtrim(t + 3, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for texture NO");
-		}
-		game->textures.no_path = v;
-		return (1);
-	}
-	if (t[0] == 'S' && t[1] == 'O' && t[2] == ' ')
-	{
-		v = ft_strtrim(t + 3, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for texture SO");
-		}
-		game->textures.so_path = v;
-		return (1);
-	}
-	if (t[0] == 'W' && t[1] == 'E' && t[2] == ' ')
-	{
-		v = ft_strtrim(t + 3, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for texture WE");
-		}
-		game->textures.we_path = v;
-		return (1);
-	}
-	if (t[0] == 'E' && t[1] == 'A' && t[2] == ' ')
-	{
-		v = ft_strtrim(t + 3, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for texture EA");
-		}
-		game->textures.ea_path = v;
-		return (1);
-	}
-	if (t[0] == 'F' && t[1] == ' ')
-	{
-		v = ft_strtrim(t + 2, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for floor color");
-		}
-		if (!validate_color(v, &game->floor_color))
-		{
-			free(v);
-			print_err("Invalid floor color configuration");
-			exit(EXIT_FAILURE);
-		}
-		free(v);
-		return (1);
-	}
-	if (t[0] == 'C' && t[1] == ' ')
-	{
-		v = ft_strtrim(t + 2, " \t\n");
-		if (!v)
-		{
-			err("Memory allocation failed for ceiling color");
-		}
-		if (!validate_color(v, &game->ceiling_color))
-		{
-			free(v);
-			print_err("Invalid ceiling color configuration");
-			exit(EXIT_FAILURE);
-		}
-		free(v);
-		return (1);
-	}
-	return (0);
-}
 
 int	append_map_line(t_parser *p, char *s)
 {
@@ -94,9 +20,7 @@ int	append_map_line(t_parser *p, char *s)
 
 	copy = ft_strdup(s);
 	if (!copy)
-	{
 		err("Memory allocation failed while copying map line");
-	}
 	new = malloc(sizeof(char *) * (p->map_count + 2));
 	if (!new)
 	{
@@ -135,38 +59,49 @@ void	compute_map_width(t_parser *p, t_game *game)
 	game->map.width = maxw;
 }
 
+static void	trim_line(t_parser *p)
+{
+	int	tl;
+
+	p->s = p->line;
+	if (p->s && p->s[0])
+	{
+		tl = ft_strlen(p->s) - 1;
+		if (tl >= 0 && (p->s[tl] == '\n' || p->s[tl] == '\r'))
+			p->s[tl] = '\0';
+	}
+	p->t = str_trim_left(p->s);
+	if (!p->in_map && (*p->t == '1' || *p->t == '0' || *p->t == ' '))
+		p->in_map = 1;
+}
+
+static int	process_current_line(t_parser *p, t_game *game)
+{
+	if (!p || !p->line)
+		return (0);
+	trim_line(p);
+	if (!p->in_map)
+	{
+		p->parsed = parse_header_line(p->t, game);
+		if (p->parsed == -1)
+			err("Invalid header configuration");
+	}
+	else
+	{
+		if (!append_map_line(p, p->s))
+			err("Failed to append map line");
+	}
+	return (1);
+}
+
 int	read_lines(t_parser *p, t_game *game)
 {
 	char	*next;
-	int		tl;
 
 	while (p->line)
 	{
-		p->s = p->line;
-		if (p->s && p->s[0])
-		{
-			tl = ft_strlen(p->s) - 1;
-			if (tl >= 0 && (p->s[tl] == '\n' || p->s[tl] == '\r'))
-				p->s[tl] = '\0';
-		}
-		p->t = str_trim_left(p->s);
-		if (!p->in_map && (*p->t == '1' || *p->t == '0' || *p->t == ' '))
-			p->in_map = 1;
-		if (!p->in_map)
-		{
-			p->parsed = parse_header_line(p->t, game);
-			if (p->parsed == -1)
-			{
-				err("Invalid header configuration");
-			}
-		}
-		else
-		{
-			if (!append_map_line(p, p->s))
-			{
-				err("Failed to append map line");
-			}
-		}
+		if (!process_current_line(p, game))
+			return (0);
 		free(p->line);
 		next = get_next_line(p->fd);
 		p->line = next;
