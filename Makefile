@@ -45,7 +45,9 @@ SRC			= \
 			$(SRC_DIR)/engine/hooks.c \
 			$(SRC_DIR)/engine/init.c \
 			$(SRC_DIR)/engine/movement.c \
+			$(SRC_DIR)/engine/movement_LR.c \
 			$(SRC_DIR)/render/render.c \
+			$(SRC_DIR)/render/draw_floor_ceiling.c \
 			$(SRC_DIR)/render/render_texture.c \
 			$(SRC_DIR)/render/render_utils.c \
 			$(SRC_DIR)/texture/texture_load.c \

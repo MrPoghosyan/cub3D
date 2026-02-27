@@ -55,6 +55,7 @@ static void	free_textures(t_cub *cub)
 }
 
 #ifdef __linux__
+
 static void	free_mlx_display(void *mlx)
 {
 	if (mlx)
@@ -64,6 +65,7 @@ static void	free_mlx_display(void *mlx)
 	}
 }
 #else
+
 static void	free_mlx_display(void *mlx)
 {
 	(void)mlx;

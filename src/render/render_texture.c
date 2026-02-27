@@ -39,72 +39,25 @@ double *step, double *tex_pos)
 static void	draw_wall_column(t_cub *cub, t_ray *ray,
 t_tex_img *tex, int x)
 {
-	double	tex_pos;
-	double	step;
-	double	shade;
-	int		tex_y;
-	int		y;
-	int		color;
+	t_wall_draw	d;
 
-	init_tex_step(ray, tex, &step, &tex_pos);
-	y = ray->draw_start;
-	while (y < ray->draw_end)
+	init_tex_step(ray, tex, &d.step, &d.tex_pos);
+	d.y = ray->draw_start;
+	while (d.y < ray->draw_end)
 	{
-		tex_y = (int)tex_pos & (tex->height - 1);
-		tex_pos += step;
-		color = get_tex_pixel(tex, ray->tex_x, tex_y);
-		shade = 1.0 / (1.0 + ray->perp_dist * 0.15);
-		color = apply_shade(color, shade);
-		img_pixel_put(&cub->img, x, y, color);
-		y++;
-	}
-}
-
-static int	interpolate(int c1, int c2, double t)
-{
-	int r;
-	int g;
-	int b;
-
-	r = ((c1 >> 16) & 0xFF) * (1 - t)
-		+ ((c2 >> 16) & 0xFF) * t;
-	g = ((c1 >> 8) & 0xFF) * (1 - t)
-		+ ((c2 >> 8) & 0xFF) * t;
-	b = (c1 & 0xFF) * (1 - t)
-		+ (c2 & 0xFF) * t;
-	return ((r << 16) | (g << 8) | b);
-}
-
-static void draw_floor_ceiling(t_cub *cub, int x, int screen_h)
-{
-	int y;
-	int top_color;
-	int horizon_color;
-	int floor_color;
-	double t;
-	int color;
-
-	top_color = 0x1B3B6F;
-	horizon_color = 0x87CEEB;
-	floor_color = color_to_int(cub->game.floor_color);
-	y = 0;
-	while (y < screen_h)
-	{
-		if (y < screen_h / 2)
-		{
-			t = (double)y / (screen_h / 2);
-			color = interpolate(top_color, horizon_color, t);
-		}
-		else
-			color = floor_color;
-		img_pixel_put(&cub->img, x, y, color);
-		y++;
+		d.tex_y = (int)d.tex_pos & (tex->height - 1);
+		d.tex_pos += d.step;
+		d.color = get_tex_pixel(tex, ray->tex_x, d.tex_y);
+		d.shade = 1.0 / (1.0 + ray->perp_dist * 0.15);
+		d.color = apply_shade(d.color, d.shade);
+		img_pixel_put(&cub->img, x, d.y, d.color);
+		d.y++;
 	}
 }
 
 void	ray_draw(t_cub *cub, t_ray *ray, int x, int h)
 {
-	t_tex_img  *tex;
+	t_tex_img	*tex;
 
 	draw_floor_ceiling(cub, x, h);
 	tex = select_texture(cub, ray);

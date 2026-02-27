@@ -41,7 +41,7 @@ void	ray_dda(t_cub *cub, t_ray *ray)
 			ray->side = 1;
 		}
 		if (safe_cell(cub, ray->map_y, ray->map_x) == '1'
-				|| safe_cell(cub, ray->map_y, ray->map_x) == 'C')
+			|| safe_cell(cub, ray->map_y, ray->map_x) == 'C')
 			ray->hit = 1;
 	}
 }

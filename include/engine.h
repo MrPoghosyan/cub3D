@@ -8,35 +8,35 @@
 # define COS_R 0.99875026039   // cos(0.05)
 # define SIN_R 0.04997916927   // sin(0.05)
 
-#ifdef __APPLE__
+# ifdef __APPLE__
 
-# define KEY_ESC 53
-# define KEY_W 13
-# define KEY_S 1
-# define KEY_A 0
-# define KEY_D 2
-# define KEY_LEFT 123
-# define KEY_RIGHT 124
-# define KEY_O 31
+#  define KEY_ESC 53
+#  define KEY_W 13
+#  define KEY_S 1
+#  define KEY_A 0
+#  define KEY_D 2
+#  define KEY_LEFT 123
+#  define KEY_RIGHT 124
+#  define KEY_O 31
 
-#else
+# else
 
-# define KEY_ESC 65307
-# define KEY_W 119
-# define KEY_S 115
-# define KEY_A 97
-# define KEY_D 100
-# define KEY_LEFT 65361
-# define KEY_RIGHT 65363
-# define KEY_O 111
+#  define KEY_ESC 65307
+#  define KEY_W 119
+#  define KEY_S 115
+#  define KEY_A 97
+#  define KEY_D 100
+#  define KEY_LEFT 65361
+#  define KEY_RIGHT 65363
+#  define KEY_O 111
 
-#endif
+# endif
 
 /* ========== INIT ========== */
 void	engine_init(t_cub *cub);
 t_cub	*init_game(char *path);
 void	init_player(t_cub *cub);
-void    ray_init(t_cub *cub, t_ray *ray, int x, int w);
+void	ray_init(t_cub *cub, t_ray *ray, int x, int w);
 
 /* ========= ENGINE ========= */
 int		engine_loop(t_cub *cub);
@@ -46,6 +46,7 @@ void	render_frame(t_cub *cub);
 void	render_3d(t_cub *cub);
 void	draw_player(t_cub *cub);
 void	ray_draw(t_cub *cub, t_ray *ray, int x, int h);
+void	draw_floor_ceiling(t_cub *cub, int x, int screen_h);
 int		apply_shade(int color, double factor);
 
 /* ========= INPUT ========== */
@@ -63,7 +64,7 @@ void	turn_right(t_cub *cub);
 /* ========= UTILS ========== */
 void	clear_image(t_cub *cub, int w, int h);
 void	img_pixel_put(t_img *img, int x, int y, int color);
-double  my_floor(double x);
+double	my_floor(double x);
 int		color_to_int(t_color c);
 
 #endif

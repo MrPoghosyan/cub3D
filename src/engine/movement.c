@@ -13,7 +13,8 @@ static int	is_walkable(t_cub *cub, double x, double y)
 		return (0);
 	if (map_x >= (int)ft_strlen(cub->game.map.grid[map_y]))
 		return (0);
-	return (cub->game.map.grid[map_y][map_x] != '1' && cub->game.map.grid[map_y][map_x] != 'C');
+	return (cub->game.map.grid[map_y][map_x] != '1'
+			&& cub->game.map.grid[map_y][map_x] != 'C');
 }
 
 void	move_forward(t_cub *cub)
@@ -66,38 +67,4 @@ void	move_right(t_cub *cub)
 		cub->player.x = new_x;
 	if (is_walkable(cub, cub->player.x, new_y))
 		cub->player.y = new_y;
-}
-
-void	turn_right(t_cub *cub)
-{
-	double	old_dir_x;
-	double	old_plane_x;
-
-	old_dir_x = cub->player.dir_x;
-	old_plane_x = cub->player.plane_x;
-	cub->player.dir_x = cub->player.dir_x * COS_R
-		- cub->player.dir_y * SIN_R;
-	cub->player.dir_y = old_dir_x * SIN_R
-		+ cub->player.dir_y * COS_R;
-	cub->player.plane_x = cub->player.plane_x * COS_R
-		- cub->player.plane_y * SIN_R;
-	cub->player.plane_y = old_plane_x * SIN_R
-		+ cub->player.plane_y * COS_R;
-}
-
-void	turn_left(t_cub *cub)
-{
-	double	old_dir_x;
-	double	old_plane_x;
-
-	old_dir_x = cub->player.dir_x;
-	old_plane_x = cub->player.plane_x;
-	cub->player.dir_x = cub->player.dir_x * COS_R
-		+ cub->player.dir_y * SIN_R;
-	cub->player.dir_y = -old_dir_x * SIN_R
-		+ cub->player.dir_y * COS_R;
-	cub->player.plane_x = cub->player.plane_x * COS_R
-		+ cub->player.plane_y * SIN_R;
-	cub->player.plane_y = -old_plane_x * SIN_R
-		+ cub->player.plane_y * COS_R;
 }

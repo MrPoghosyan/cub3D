@@ -16,34 +16,6 @@ t_cub	*init_game(char *path)
 	return (cub);
 }
 
-void	engine_init(t_cub *cub)
-{
-	int	size;
-	int	i;
-
-	cub->mlx = mlx_init();
-	if (!cub->mlx)
-		err("mlx_init failed");
-	cub->win = mlx_new_window(cub->mlx, 1200, 800, "cub3D");
-	if (!cub->win)
-		err("mlx_new_window failed");
-	cub->img.img = mlx_new_image(cub->mlx, 1200, 800);
-	cub->img.addr = mlx_get_data_addr(cub->img.img,
-			&cub->img.bits_per_pixel,
-			&cub->img.line_length,
-			&cub->img.endian);
-	size = 800 * cub->img.line_length;
-	i = -1;
-	while (++i < size)
-	cub->img.addr[i] = 0;
-	mlx_hook(cub->win, 2, 1L << 0, key_hook, cub);
-	mlx_hook(cub->win, 17, 0, close_game, cub);
-	mlx_hook(cub->win, 6, 1L << 6, mouse_rot, cub);
-	mlx_loop_hook(cub->mlx, engine_loop, cub);
-	if (!load_textures(cub))
-		err("Texture load failed");
-}
-
 static void	set_dir_ns(t_cub *cub, char d)
 {
 	if (d == 'N')
@@ -80,9 +52,9 @@ static void	set_dir_ew(t_cub *cub, char d)
 	}
 }
 
-void init_player(t_cub *cub)
+void	init_player(t_cub *cub)
 {
-	char d;
+	char	d;
 
 	cub->player.x = cub->game.map.player_x + 0.5;
 	cub->player.y = cub->game.map.player_y + 0.5;
@@ -99,7 +71,7 @@ void init_player(t_cub *cub)
 	if (cub->player.dir_x == 0 && cub->player.dir_y == 0)
 	{
 		cub->player.dir_x = 0;
-		cub->player.dir_y = -1; 
+		cub->player.dir_y = -1;
 	}
 	if (cub->player.plane_x == 0 && cub->player.plane_y == 0)
 	{

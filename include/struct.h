@@ -121,4 +121,24 @@ typedef struct s_parser
 	int			l;
 }				t_parser;
 
+typedef struct s_wall_draw
+{
+	double	tex_pos;
+	double	step;
+	double	shade;
+	int		tex_y;
+	int		y;
+	int		color;
+}	t_wall_draw;
+
+typedef struct s_floor_draw
+{
+	int		y;
+	int		top_color;
+	int		horizon_color;
+	int		floor_color;
+	double	t;
+	int		color;
+}	t_floor_draw;
+
 #endif
